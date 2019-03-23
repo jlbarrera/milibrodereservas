@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Mi libro de reservas</string>
+    <string name="login_button">INICIAR SESIÓN</string>
+    <string name="username">Usuario o correo electrónico</string>
+    <string name="password">Contraseña</string>
+    <string name="remember">Recuérdame</string>
+    <string name="not_account">¿No tienes una cuenta? Crear una</string>
+</resources>
