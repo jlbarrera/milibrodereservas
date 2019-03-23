@@ -7,10 +7,12 @@ import android.content.SharedPreferences;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Switch;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -22,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
     private Switch remember;
     private Button login;
     private EditText username;
+    private EditText password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,46 +34,73 @@ public class MainActivity extends AppCompatActivity {
         remember = findViewById(R.id.remember);
         login = findViewById(R.id.login);
         username = findViewById(R.id.username);
+        password = findViewById(R.id.password);
 
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                if (login()) {
-                    // We send the params to MyBookings Activity
-                    Intent intent = new Intent(MainActivity.this, MyBookings.class);
-                    intent.putExtra(USERNAME, username.getText().toString());
-                    intent.putExtra(REMEMBER, remember.isChecked());
-
-                    startActivity(intent);
-                } else {
-                    // TODO Show the error message
-                }
+                login(username.getText().toString(), password.getText().toString());
             }
         });
     }
 
-    public boolean login() {
+    private void login(String username, String password) {
         /**
          * Authenticate to the server
          */
-        //TODO Try to authenticate to backend
 
-        return Boolean.TRUE;
+        boolean logged_in = Boolean.TRUE; //TODO Try to authenticate to the backend
+
+        if (logged_in) {
+            // We send the params to MyBookings Activity
+            Intent intent = new Intent(MainActivity.this, MyBookings.class);
+            intent.putExtra(USERNAME, username);
+            intent.putExtra(REMEMBER, remember.isChecked());
+
+            startActivity(intent);
+        } else {
+            // TODO Show the error message
+        }
     }
 
     public void register(View view) {
         /**
-         *  Create a new account
+         *  Show dialog form to create new account
          */
-        AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this);
-        dialog.setTitle("Create account");
-        dialog.setPositiveButton("Create account", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
+
+        // get dialog_register.xml view
+        LayoutInflater inflater = this.getLayoutInflater();
+        View DialogView = inflater.inflate(R.layout.dialog_register, null);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+
+        // Set dialog_register.xml to alert dialog builder
+        builder.setView(DialogView);
+
+        // Input fields of dialog form
+        final TextView username = DialogView.findViewById(R.id.username);
+
+        builder
+            .setPositiveButton(R.string.create_account, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    boolean registered = Boolean.TRUE; //TODO Try to register to the backend
+                    if (registered) {
+                        login(username.getText().toString(),"");
+                    } else {
+
+                    }
+                }
+            }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+
+        AlertDialog dialog = builder.create();
         dialog.show();
     }
+
 }

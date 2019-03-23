@@ -1,8 +1,12 @@
 <resources>
     <string name="app_name">My registration desk</string>
     <string name="login_button">LOGIN</string>
-    <string name="username">Username o email</string>
+    <string name="username">Username</string>
     <string name="password">Password</string>
+    <string name="repeat_password">Repeat password</string>
     <string name="remember">Remember me</string>
     <string name="not_account">Not account yet? Create one</string>
+    <string name="cancel">Cancel</string>
+    <string name="create_account">Create account</string>
+    <string name="email">e-mail</string>
 </resources>
