@@ -5,6 +5,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,11 +24,6 @@ public class MyBookings extends AppCompatActivity {
         String username = intent.getStringExtra(MainActivity.USERNAME);
         Boolean remember = intent.getBooleanExtra(MainActivity.REMEMBER, Boolean.FALSE);
 
-
-        // Show username in screen
-        TextView username_text = findViewById(R.id.username);
-        username_text.setText(username);
-
         // Save sharepreferences
         MainActivity.sharedpreferences = getSharedPreferences(MainActivity.PREFERENCES, Context.MODE_PRIVATE);
         SharedPreferences.Editor sp_editor = MainActivity.sharedpreferences.edit();
@@ -36,5 +34,17 @@ public class MyBookings extends AppCompatActivity {
         Context context = getApplicationContext();
         Toast toast = Toast.makeText(context, "Bienvenido "+username, Toast.LENGTH_SHORT);
         toast.show();
+
+        // Adding Toolbar to Main screen
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_menu, menu);
+        return true;
     }
 }

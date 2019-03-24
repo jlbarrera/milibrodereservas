@@ -10,4 +10,6 @@
     <string name="create_account">Crear cuenta</string>
     <string name="create">Crear</string>
     <string name="email">Correo electrónico</string>
+    <string name="settings">Ajustes</string>
+    <string name="logout">Salir</string>
 </resources>
