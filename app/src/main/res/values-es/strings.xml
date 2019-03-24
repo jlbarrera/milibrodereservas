@@ -8,5 +8,6 @@
     <string name="not_account">¿No tienes una cuenta? Crear una</string>
     <string name="cancel">Cancelar</string>
     <string name="create_account">Crear cuenta</string>
+    <string name="create">Crear</string>
     <string name="email">Correo electrónico</string>
 </resources>

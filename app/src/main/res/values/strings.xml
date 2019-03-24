@@ -8,5 +8,6 @@
     <string name="not_account">Not account yet? Create one</string>
     <string name="cancel">Cancel</string>
     <string name="create_account">Create account</string>
+    <string name="create">Create</string>
     <string name="email">e-mail</string>
 </resources>

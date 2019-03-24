@@ -81,23 +81,25 @@ public class MainActivity extends AppCompatActivity {
         final TextView username = DialogView.findViewById(R.id.username);
 
         builder
-            .setPositiveButton(R.string.create_account, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                    boolean registered = Boolean.TRUE; //TODO Try to register to the backend
-                    if (registered) {
-                        login(username.getText().toString(),"");
-                    } else {
-
+                .setTitle(R.string.create_account)
+                .setPositiveButton(R.string.create, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        boolean registered = Boolean.TRUE; //TODO Try to register to the backend
+                        if (registered) {
+                            login(username.getText().toString(),"");
+                        } else {
+                            // TODO Show the error message
+                        }
                     }
-                }
-            }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.cancel();
-                }
-            });
+                })
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
 
         AlertDialog dialog = builder.create();
         dialog.show();
