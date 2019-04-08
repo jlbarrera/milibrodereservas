@@ -12,4 +12,5 @@
     <string name="email">e-mail</string>
     <string name="settings">Settings</string>
     <string name="logout">Logout</string>
+    <string name="today">Today bookings</string>
 </resources>

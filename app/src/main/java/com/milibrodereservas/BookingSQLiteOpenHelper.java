@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.milibrodereservas.model.Booking;
+
 public class BookingSQLiteOpenHelper extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME = "MyBookings.db";
@@ -35,6 +37,17 @@ public class BookingSQLiteOpenHelper extends SQLiteOpenHelper {
         String[] columnas = new String[] {"id", "name"};
         Cursor cursor = db.query(true, "bookings", columnas, null, null, null, null, null, null);
         return cursor;
+    }
+
+    public long addBooking(Booking booking){
+        /**
+         * Insert a new Booking in the database
+         */
+        ContentValues new_booking = new ContentValues();
+        new_booking.put("name", booking.getWhen());
+        SQLiteDatabase db = this.getReadableDatabase();
+        long booking_id = db.insert("bookings", null,new_booking);
+        return booking_id;
     }
 
     private void populate(SQLiteDatabase db) {

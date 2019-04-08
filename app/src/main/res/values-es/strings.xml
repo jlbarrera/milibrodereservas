@@ -12,4 +12,5 @@
     <string name="email">Correo electrónico</string>
     <string name="settings">Ajustes</string>
     <string name="logout">Salir</string>
+    <string name="today">Reservas de hoy</string>
 </resources>

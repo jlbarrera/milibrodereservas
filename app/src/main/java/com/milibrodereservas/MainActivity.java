@@ -1,6 +1,6 @@
 package com.milibrodereservas;
 
-import android.content.Context;
+import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.TextView;
+import com.milibrodereservas.DatabaseSyncTask;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -52,6 +53,11 @@ public class MainActivity extends AppCompatActivity {
         boolean logged_in = Boolean.TRUE; //TODO Try to authenticate to the backend
 
         if (logged_in) {
+
+            // Sync device database
+            DatabaseSyncTask task = new DatabaseSyncTask(MainActivity.this);
+            task.execute();
+
             // We send the params to MyBookings Activity
             Intent intent = new Intent(MainActivity.this, MyBookings.class);
             intent.putExtra(USERNAME, username);
