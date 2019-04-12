@@ -13,3 +13,5 @@
 .externalNativeBuild
 .idea/
 gradle/
+app/google-services.json
+app/release/

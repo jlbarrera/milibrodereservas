@@ -10,7 +10,11 @@ import com.milibrodereservas.model.Booking;
 
 public class BookingSQLiteOpenHelper extends SQLiteOpenHelper {
 
-    public static final String DATABASE_NAME = "MyBookings.db";
+    private static final String DATABASE_NAME = "MyBookings.db";
+    private static final String BOOKING_TABLE = "bookings";
+    private static final String BOOKING_ID = "id";
+    private static final String CUSTOMER = "customer";
+    private static final String WHEN = "event_datetime";
 
     public BookingSQLiteOpenHelper(Context context) {
         super(context, DATABASE_NAME , null, 1);
@@ -18,25 +22,19 @@ public class BookingSQLiteOpenHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE bookings(id int PRIMARY KEY, name text)");
-        populate(db);
+        db.execSQL("CREATE TABLE " + BOOKING_TABLE + "(" + BOOKING_ID + " INT PRIMARY KEY, " + CUSTOMER + " TEXT, " + WHEN + " REAL)");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS bookings");
-        db.execSQL("CREATE TABLE bookings(id int PRIMARY KEY, name text)");
-        populate(db);
+        db.execSQL("DROP TABLE IF EXISTS " + BOOKING_TABLE);
+        db.execSQL("CREATE TABLE " + BOOKING_TABLE + "(" + BOOKING_ID + " INT PRIMARY KEY, " + CUSTOMER + " TEXT, " + WHEN + " REAL)");
     }
 
-    public Cursor getBookings(){
-        /**
-         * Returns all Bookings
-         */
+    public void clear() {
         SQLiteDatabase db = this.getReadableDatabase();
-        String[] columnas = new String[] {"id", "name"};
-        Cursor cursor = db.query(true, "bookings", columnas, null, null, null, null, null, null);
-        return cursor;
+        db.execSQL("DROP TABLE IF EXISTS " + BOOKING_TABLE);
+        db.execSQL("CREATE TABLE " + BOOKING_TABLE + "(" + BOOKING_ID + " INT PRIMARY KEY, " + CUSTOMER + " TEXT, " + WHEN + " REAL)");
     }
 
     public long addBooking(Booking booking){
@@ -44,32 +42,12 @@ public class BookingSQLiteOpenHelper extends SQLiteOpenHelper {
          * Insert a new Booking in the database
          */
         ContentValues new_booking = new ContentValues();
-        new_booking.put("name", booking.getWhen());
+        new_booking.put(CUSTOMER, booking.getCustomer());
+        new_booking.put(WHEN, booking.getWhen().getSeconds());
+
         SQLiteDatabase db = this.getReadableDatabase();
-        long booking_id = db.insert("bookings", null,new_booking);
+        long booking_id = db.insert(BOOKING_TABLE, null, new_booking);
         return booking_id;
     }
 
-    private void populate(SQLiteDatabase db) {
-        String[] values = new String[] { "ANTONIO", "CARMEN", "FRANCISCO",
-                "ANDREA", "JAVIER", "NURIA", "MERCEDES", "CRISTINA",
-                "Linux", "SONIA", "TERESA", "JOSE MANUEL", "ENRIQUE", "DIEGO",
-                "MONICA", "CLAUDIA", "JOAQUIN", "ANA MARIA", "PILAR", "ANA",
-                "SANDRA", "VERONICA", "VICENTE", "ANTONIO", "CARMEN", "FRANCISCO",
-                "ANDREA", "JAVIER", "NURIA", "MERCEDES", "CRISTINA",
-                "Linux", "SONIA", "TERESA", "JOSE MANUEL", "ENRIQUE", "DIEGO",
-                "MONICA", "CLAUDIA", "JOAQUIN", "ANA MARIA", "PILAR", "ANA",
-                "SANDRA", "VERONICA", "VICENTE", "ANTONIO", "CARMEN", "FRANCISCO",
-                "ANDREA", "JAVIER", "NURIA", "MERCEDES", "CRISTINA",
-                "Linux", "SONIA", "TERESA", "JOSE MANUEL", "ENRIQUE", "DIEGO",
-                "MONICA", "CLAUDIA", "JOAQUIN", "ANA MARIA", "PILAR", "ANA",
-                "SANDRA", "VERONICA", "VICENTE" };
-
-        for (int i=0; i<values.length; i++) {
-            ContentValues new_booking = new ContentValues();
-            new_booking.put("id", i+1);
-            new_booking.put("name", values[i]);
-            db.insert("bookings", null, new_booking);
-        }
-    }
 }

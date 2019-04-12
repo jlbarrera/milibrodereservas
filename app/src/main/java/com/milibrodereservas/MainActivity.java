@@ -1,6 +1,5 @@
 package com.milibrodereservas;
 
-import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,7 +12,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.TextView;
-import com.milibrodereservas.DatabaseSyncTask;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -43,6 +41,9 @@ public class MainActivity extends AppCompatActivity {
                 login(username.getText().toString(), password.getText().toString());
             }
         });
+
+        BookingSQLiteOpenHelper db = new BookingSQLiteOpenHelper(this);
+        db.clear();
     }
 
     private void login(String username, String password) {
@@ -55,8 +56,8 @@ public class MainActivity extends AppCompatActivity {
         if (logged_in) {
 
             // Sync device database
-            DatabaseSyncTask task = new DatabaseSyncTask(MainActivity.this);
-            task.execute();
+            //DatabaseSyncTask task = new DatabaseSyncTask(MainActivity.this);
+            //task.execute();
 
             // We send the params to MyBookings Activity
             Intent intent = new Intent(MainActivity.this, MyBookings.class);

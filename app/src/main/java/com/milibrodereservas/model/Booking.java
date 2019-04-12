@@ -1,19 +1,14 @@
 package com.milibrodereservas.model;
 
+import com.google.firebase.Timestamp;
+
 public class Booking {
-    private int id;
     private String Customer;
-    private String When;
+    private Timestamp when;
 
-    public Booking(int id, String customer, String when) {
-        this.id = id;
+    public Booking(String customer, Timestamp when) {
         Customer = customer;
-        When = when;
-    }
-
-    public Booking(String customer, String when) {
-        Customer = customer;
-        When = when;
+        this.when = when;
     }
 
     public String getCustomer() {
@@ -24,19 +19,11 @@ public class Booking {
         Customer = customer;
     }
 
-    public String getWhen() {
-        return When;
+    public Timestamp getWhen() {
+        return when;
     }
 
-    public void setWhen(String when) {
-        When = when;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
+    public void setWhen(Timestamp when) {
+        this.when = when;
     }
 }

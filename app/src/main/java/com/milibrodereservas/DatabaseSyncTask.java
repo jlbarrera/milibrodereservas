@@ -1,33 +1,18 @@
 package com.milibrodereservas;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.JsonReader;
 import android.widget.Toast;
 
 import com.milibrodereservas.model.Booking;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-
-public class DatabaseSyncTask extends AsyncTask<Void, Integer, Boolean> {
+public class DatabaseSyncTask extends AsyncTask<Booking, Integer, Boolean> {
 
     private BookingSQLiteOpenHelper db;
     private Context mContext;
 
-    public DatabaseSyncTask (Context context) {
+    public DatabaseSyncTask(Context context) {
         mContext = context;
     }
 
@@ -37,15 +22,15 @@ public class DatabaseSyncTask extends AsyncTask<Void, Integer, Boolean> {
     }
 
     @Override
-    protected Boolean doInBackground(Void... params) {
+    protected Boolean doInBackground(Booking... bookings) {
+        /**
+         * Download last events from server and add new events to the local db
+         */
         db = new BookingSQLiteOpenHelper(mContext);
-        try {
-            List<Booking> bookings = readBookings();
-            for (Booking booking : bookings) {
-                db.addBooking(booking);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+        int count = bookings.length;
+
+        for (int i = 0; i < count; i++) {
+            Long id = db.addBooking(bookings[i]);
         }
 
         return true;
@@ -53,43 +38,6 @@ public class DatabaseSyncTask extends AsyncTask<Void, Integer, Boolean> {
 
     @Override
     protected void onPostExecute(Boolean aBoolean) {
-        Toast toast = Toast.makeText(mContext, "Actualizado!", Toast.LENGTH_SHORT);
-        toast.show();
-        // Reload current fragment
-
+        super.onPostExecute(aBoolean);
     }
-
-    public List<Booking> readBookings() throws IOException {
-
-        HttpHandler sh = new HttpHandler();
-        String url = "http://192.168.1.106:8000/api/bookings/";
-        String jsonStr = sh.makeServiceCall(url);
-        List<Booking> bookings = new ArrayList<Booking>();
-
-        if (jsonStr != null) {
-            try {
-                JSONObject jsonObj = new JSONObject(jsonStr);
-
-                // Getting JSON Array node
-                JSONArray results = jsonObj.getJSONArray("results");
-
-                // looping through All results
-                for (int i = 0; i < results.length(); i++) {
-                    JSONObject event = results.getJSONObject(i);
-                    bookings.add(readBooking(event));
-                }
-            }catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-        return bookings;
-    }
-
-    public Booking readBooking(JSONObject event) throws JSONException {
-        int id = event.getInt("id");
-        String customer = event.getString("cliente_id");
-        String when = event.getString("when");
-        return new Booking(id, customer, when);
-    }
-
 }
