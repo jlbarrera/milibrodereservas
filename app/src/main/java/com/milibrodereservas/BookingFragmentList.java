@@ -52,7 +52,7 @@ public class BookingFragmentList extends Fragment {
 
         list = new ArrayList<String>();
         view = inflater.inflate(R.layout.fragment_booking_fragment_list, container, false);
-        
+
         // Load local bookings
         loadLocalBookings();
 

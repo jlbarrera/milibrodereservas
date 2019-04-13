@@ -3,14 +3,17 @@ package com.milibrodereservas;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.View;
 import android.widget.Toast;
 
 public class MyBookings extends AppCompatActivity {
+    private FloatingActionButton new_booking;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +39,16 @@ public class MyBookings extends AppCompatActivity {
         // Adding Toolbar to Main screen
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        // New booking
+        new_booking = findViewById(R.id.new_booking);
+        new_booking.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent new_booking_intent = new Intent(MyBookings.this, NewBooking.class);
+                startActivity(new_booking_intent);
+            }
+        });
     }
 
     @Override

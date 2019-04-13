@@ -14,4 +14,10 @@
     <string name="logout">Salir</string>
     <string name="today">Reservas de hoy</string>
     <string name="updated">Actualizado correctamente</string>
+    <string name="select_day">Elige día</string>
+    <string name="select_time">Elige hora</string>
+    <string name="select_customer">Elige cliente</string>
+    <string name="next">Siguiente</string>
+    <string name="confirm_booking">Confirmar reserva</string>
+    <string name="resume_booking">Resumen de la reserva</string>
 </resources>
