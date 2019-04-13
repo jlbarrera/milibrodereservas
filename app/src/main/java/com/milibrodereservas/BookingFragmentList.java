@@ -12,8 +12,11 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -32,6 +35,12 @@ import java.util.ArrayList;
  */
 public class BookingFragmentList extends Fragment {
 
+    ListView listview;
+    ArrayAdapter<String> adapter;
+    ArrayList<String> list;
+    View view;
+    FirebaseFirestore db;
+
     public BookingFragmentList() {
         // Required empty public constructor
     }
@@ -41,13 +50,22 @@ public class BookingFragmentList extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        final ArrayList<String> list = new ArrayList<String>();
-        final View view = inflater.inflate(R.layout.fragment_booking_fragment_list, container, false);
-        final ArrayList<Booking> bookings = new ArrayList<Booking>();
-
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-
+        list = new ArrayList<String>();
+        view = inflater.inflate(R.layout.fragment_booking_fragment_list, container, false);
+        
         // Load local bookings
+        loadLocalBookings();
+
+        // Load server bookings
+        loadServerBookings();
+
+        return view;
+    }
+
+    private void loadLocalBookings() {
+        /**
+         * Load local bookings from db
+         */
         BookingSQLiteOpenHelper local_db = new BookingSQLiteOpenHelper(getActivity());
         Date today = new Date();
         Cursor local_bookings = local_db.getBookings(today);
@@ -58,10 +76,17 @@ public class BookingFragmentList extends Fragment {
         }
 
 
-        final ListView listview = view.findViewById(R.id.booking_list);
-        final ArrayAdapter<String> adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, list);
+        listview = view.findViewById(R.id.booking_list);
+        adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, list);
         listview.setAdapter(adapter);
 
+    }
+
+    private void loadServerBookings() {
+        /***
+         * Return today bookings from server
+         */
+        // Set today query
         Calendar today_am = Calendar.getInstance();
         today_am.set(Calendar.HOUR_OF_DAY, 0);
         today_am.set(Calendar.MINUTE, 0);
@@ -73,6 +98,8 @@ public class BookingFragmentList extends Fragment {
         today_pm.set(Calendar.SECOND, 59);
 
         // Get bookings
+        db = FirebaseFirestore.getInstance();
+
         db.collection("bookings")
                 .orderBy("when")
                 .whereGreaterThan("when", today_am.getTime())
@@ -84,24 +111,31 @@ public class BookingFragmentList extends Fragment {
                         if (task.isSuccessful()) {
                             adapter.clear();
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                String id = document.getId();
-                                String customer = (String) document.getData().get("customer");
-                                Timestamp when = (Timestamp) document.getData().get("when");
-                                Booking booking = new Booking(id, customer, when);
+                                final String id = document.getId();
+                                final Timestamp when = (Timestamp) document.getData().get("when");
+                                DocumentReference customer_ref = (DocumentReference) document.getData().get("customer");
+                                customer_ref.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                        if (documentSnapshot.exists()){
+                                            String customer = documentSnapshot.getString("name");
 
-                                SimpleDateFormat sdf = new SimpleDateFormat("h:mm");
-                                sdf.setTimeZone(TimeZone.getTimeZone("GMT+1"));
-                                String formattedDate = sdf.format(when.toDate());
+                                            Booking booking = new Booking(id, customer, when);
 
-                                adapter.add(formattedDate + "  " + customer);
+                                            SimpleDateFormat sdf = new SimpleDateFormat("h:mm");
+                                            sdf.setTimeZone(TimeZone.getTimeZone("GMT+1"));
+                                            String formattedDate = sdf.format(when.toDate());
 
-                                // Sync device database
-                                new DatabaseSyncTask(getActivity()).execute(booking);
+                                            adapter.add(formattedDate + "  " + customer);
+
+                                            // Sync device database
+                                            new DatabaseSyncTask(getActivity()).execute(booking);
+                                        }
+                                    }
+                                });
+
                             }
 
-                            // Inflate the layout for this fragment
-                            //final ListView listview = view.findViewById(R.id.booking_list);
-                            //final ArrayAdapter<String> adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, list);
                             listview.setAdapter(adapter);
 
                         } else {
@@ -109,8 +143,6 @@ public class BookingFragmentList extends Fragment {
                         }
                     }
                 });
-
-        return view;
     }
 
 }
