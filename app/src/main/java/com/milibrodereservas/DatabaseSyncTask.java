@@ -30,7 +30,7 @@ public class DatabaseSyncTask extends AsyncTask<Booking, Integer, Boolean> {
         int count = bookings.length;
 
         for (int i = 0; i < count; i++) {
-            Long id = db.addBooking(bookings[i]);
+            db.addBooking(bookings[i]);
         }
 
         return true;

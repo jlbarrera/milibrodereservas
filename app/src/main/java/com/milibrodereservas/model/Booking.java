@@ -3,12 +3,22 @@ package com.milibrodereservas.model;
 import com.google.firebase.Timestamp;
 
 public class Booking {
+    private String Id;
     private String Customer;
-    private Timestamp when;
+    private Timestamp When;
 
-    public Booking(String customer, Timestamp when) {
+    public Booking(String id, String customer, Timestamp when) {
+        Id = id;
         Customer = customer;
-        this.when = when;
+        When = when;
+    }
+
+    public String getId() {
+        return Id;
+    }
+
+    public void setId(String id) {
+        Id = id;
     }
 
     public String getCustomer() {
@@ -20,10 +30,10 @@ public class Booking {
     }
 
     public Timestamp getWhen() {
-        return when;
+        return When;
     }
 
     public void setWhen(Timestamp when) {
-        this.when = when;
+        this.When = when;
     }
 }
