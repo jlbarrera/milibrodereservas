@@ -1,5 +1,6 @@
 package com.milibrodereservas;
 
+import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,6 +13,9 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 public class MyBookings extends AppCompatActivity {
     private FloatingActionButton new_booking;
 
@@ -19,6 +23,12 @@ public class MyBookings extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_bookings);
+
+        // Change action bar title
+        SimpleDateFormat sdf = new SimpleDateFormat("EEE, d MMM");
+        Calendar today = Calendar.getInstance();
+
+        getSupportActionBar().setTitle( getResources().getString(R.string.today_bookings) + " [" + sdf.format(today.getTime()) + "]");
 
         // Get parameters from MainActivity
         Intent intent = getIntent();
@@ -35,10 +45,6 @@ public class MyBookings extends AppCompatActivity {
         Context context = getApplicationContext();
         Toast toast = Toast.makeText(context, "Bienvendo " + username, Toast.LENGTH_SHORT);
         toast.show();
-
-        // Adding Toolbar to Main screen
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
         // New booking
         new_booking = findViewById(R.id.new_booking);

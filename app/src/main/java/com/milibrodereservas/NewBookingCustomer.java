@@ -33,6 +33,9 @@ public class NewBookingCustomer extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_booking_customer);
 
+        // Change action bar title
+        getSupportActionBar().setTitle( getResources().getString(R.string.select_customer));
+
         // Get parameters from NewBooking and NewBookingTime
         Intent intent = getIntent();
         final Calendar day = (Calendar) intent.getSerializableExtra(NewBooking.DAY);

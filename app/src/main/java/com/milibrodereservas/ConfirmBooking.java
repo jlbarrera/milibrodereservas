@@ -39,6 +39,9 @@ public class ConfirmBooking extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_confirm_booking);
 
+        // Change action bar title
+        getSupportActionBar().setTitle( getResources().getString(R.string.confirm_booking));
+
         // Get parameters from MainActivity
         Intent intent = getIntent();
         day = (Calendar) intent.getSerializableExtra(NewBooking.DAY);

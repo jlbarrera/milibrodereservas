@@ -20,12 +20,16 @@ public class NewBookingTime extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_booking_time);
 
+        // Change action bar title
+        getSupportActionBar().setTitle( getResources().getString(R.string.select_time));
+
         // Get parameters from NewBooking
         Intent intent = getIntent();
         final Calendar day = (Calendar) intent.getSerializableExtra(NewBooking.DAY);
 
         // Capture time changes
         timepicker = findViewById(R.id.timePicker);
+        timepicker.setIs24HourView(true);
         timepicker.setOnTimeChangedListener( new OnTimeChangedListener() {
             @Override
              public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {

@@ -6,17 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".NewBooking">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/customer"
-        android:layout_width="412dp"
-        android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme"
-        app:layout_constraintStart_toStartOf="parent"
-        app:title="@string/select_day"
-        tools:layout_editor_absoluteY="0dp" />
-
     <CalendarView
         android:id="@+id/calendarView"
         android:layout_width="wrap_content"
@@ -30,7 +19,7 @@
         app:layout_constraintHorizontal_bias="0.488"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.292" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/next"

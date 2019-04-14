@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.CalendarView.OnDateChangeListener;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class NewBooking extends AppCompatActivity {
@@ -19,6 +20,9 @@ public class NewBooking extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_booking);
+
+        // Change action bar title
+        getSupportActionBar().setTitle( getResources().getString(R.string.select_day));
 
         // Initialize date
         Day = Calendar.getInstance();
