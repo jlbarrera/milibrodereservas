@@ -33,7 +33,7 @@ public class MyBookings extends AppCompatActivity {
 
         // Display pop-up message
         Context context = getApplicationContext();
-        Toast toast = Toast.makeText(context, "Bienvenido "+username, Toast.LENGTH_SHORT);
+        Toast toast = Toast.makeText(context, "Bienvendo " + username, Toast.LENGTH_SHORT);
         toast.show();
 
         // Adding Toolbar to Main screen

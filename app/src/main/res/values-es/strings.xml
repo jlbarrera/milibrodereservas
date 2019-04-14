@@ -20,4 +20,6 @@
     <string name="next">Siguiente</string>
     <string name="confirm_booking">Confirmar reserva</string>
     <string name="resume_booking">Resumen de la reserva</string>
+    <string name="booking_created">La reserva ha sido creada</string>
+    <string name="welcome">Bienvenido</string>
 </resources>

@@ -20,4 +20,6 @@
     <string name="select_time">Select time</string>
     <string name="confirm_booking">Confirm booking</string>
     <string name="resume_booking">Booking resume</string>
+    <string name="booking_created">Booking created successfully</string>
+    <string name="welcome">Welcome</string>
 </resources>

@@ -5,13 +5,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TimePicker.OnTimeChangedListener;
 import android.widget.TimePicker;
+
+import java.util.Calendar;
 
 public class NewBookingTime extends AppCompatActivity {
 
-    public static String HOUR = "hour";
-    public static String MINUTES = "minutes";
-    private TimePicker timePicker;
+    private TimePicker timepicker;
     private Button next;
 
     @Override
@@ -19,21 +20,26 @@ public class NewBookingTime extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_booking_time);
 
-        // Get parameters from MainActivity
+        // Get parameters from NewBooking
         Intent intent = getIntent();
-        final String day = intent.getStringExtra(NewBooking.DAY);
+        final Calendar day = (Calendar) intent.getSerializableExtra(NewBooking.DAY);
 
+        // Capture time changes
+        timepicker = findViewById(R.id.timePicker);
+        timepicker.setOnTimeChangedListener( new OnTimeChangedListener() {
+            @Override
+             public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
+                day.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                day.set(Calendar.MINUTE, minute);
+             }
+        });
+
+        // We send the params to Next Activity
         next = findViewById(R.id.next);
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                timePicker = (TimePicker) findViewById(R.id.timePicker);
-                int hour = timePicker.getCurrentHour();
-                int minutes = timePicker.getCurrentMinute();
-
                 Intent intent = new Intent(NewBookingTime.this, NewBookingCustomer.class);
-                intent.putExtra(HOUR, "hora");
-                intent.putExtra(MINUTES, "minutos");
                 intent.putExtra(NewBooking.DAY, day);
                 startActivity(intent);
             }
