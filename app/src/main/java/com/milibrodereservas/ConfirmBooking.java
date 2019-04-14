@@ -1,7 +1,15 @@
 package com.milibrodereservas;
 
+import android.Manifest;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.provider.CalendarContract.Events;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -18,12 +26,13 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Date;
-import java.util.TimeZone;
 
 public class ConfirmBooking extends AppCompatActivity {
 
     FirebaseFirestore db;
+    int MY_PERMISSIONS_REQUEST_WRITE_CALENDAR = -1;
+    Calendar day;
+    Customer customer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,8 +41,8 @@ public class ConfirmBooking extends AppCompatActivity {
 
         // Get parameters from MainActivity
         Intent intent = getIntent();
-        final Calendar day = (Calendar) intent.getSerializableExtra(NewBooking.DAY);
-        final Customer customer = (Customer) intent.getSerializableExtra(NewBookingCustomer.CUSTOMER);
+        day = (Calendar) intent.getSerializableExtra(NewBooking.DAY);
+        customer = (Customer) intent.getSerializableExtra(NewBookingCustomer.CUSTOMER);
 
         // Update the view
         TextView text_customer =  findViewById(R.id.customer);
@@ -43,7 +52,7 @@ public class ConfirmBooking extends AppCompatActivity {
         text_customer.setText(customer.getName());
 
         SimpleDateFormat sdf_day = new SimpleDateFormat("EEE, d MMM yyyy");
-        SimpleDateFormat sdf_hour = new SimpleDateFormat("h:mm");
+        SimpleDateFormat sdf_hour = new SimpleDateFormat("HH:mm");
 
 
         text_date.setText(sdf_day.format(day.getTime()));
@@ -60,6 +69,9 @@ public class ConfirmBooking extends AppCompatActivity {
                 data.put("customer", customer_ref);
                 data.put("when", day.getTime());
                 createBooking(data);
+
+                // Create event in the user calendar
+                createEventCalendar();
             }
         });
 
@@ -83,5 +95,48 @@ public class ConfirmBooking extends AppCompatActivity {
                         toast.show();
                     }
                 });
+    }
+
+    private void createEventCalendar() {
+        /**
+         * Create booking in the user device calendar
+         */
+
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_CALENDAR)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(ConfirmBooking.this,
+                    new String[]{Manifest.permission.WRITE_CALENDAR},
+                    MY_PERMISSIONS_REQUEST_WRITE_CALENDAR);
+
+        }
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_CALENDAR) ==
+                PackageManager.PERMISSION_GRANTED) {
+
+            // TODO: Ask the user to select the calendar
+            long calID = 1;
+
+            Calendar end = (Calendar) day.clone();
+            end.set(Calendar.HOUR_OF_DAY, day.get(Calendar.HOUR_OF_DAY) + 1 ); // 1h duration by default
+
+            ContentResolver cr = getContentResolver();
+            ContentValues values = new ContentValues();
+            values.put(Events.DTSTART, day.getTimeInMillis());
+            values.put(Events.DTEND, end.getTimeInMillis());
+            values.put(Events.TITLE, customer.getName());
+            values.put(Events.CALENDAR_ID, calID);
+            values.put(Events.EVENT_TIMEZONE, "Europe/Madrid");
+            Uri uri = cr.insert(Events.CONTENT_URI, values);
+
+            long eventID = Long.parseLong(uri.getLastPathSegment());
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        String kk = "";
     }
 }

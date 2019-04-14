@@ -18,6 +18,7 @@ import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -100,7 +101,7 @@ public class BookingFragmentList extends Fragment {
         db = FirebaseFirestore.getInstance();
 
         db.collection("bookings")
-                .orderBy("when")
+                .orderBy("when", Query.Direction.DESCENDING)
                 .whereGreaterThan("when", today_am.getTime())
                 .whereLessThan("when", today_pm.getTime())
                 .get()
@@ -121,8 +122,7 @@ public class BookingFragmentList extends Fragment {
 
                                             Booking booking = new Booking(id, customer, when);
 
-                                            SimpleDateFormat sdf = new SimpleDateFormat("h:mm");
-                                            sdf.setTimeZone(TimeZone.getTimeZone("GMT+1"));
+                                            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
                                             String formattedDate = sdf.format(when.toDate());
 
                                             adapter.add(formattedDate + "  " + customer);
